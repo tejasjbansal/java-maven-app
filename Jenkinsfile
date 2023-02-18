@@ -12,6 +12,7 @@ pipeline {
         stage("init") {
             steps {
                 script {
+                    echo "Init the application..."
 //                    gv = load "script.groovy"
                 }
             }
@@ -19,6 +20,7 @@ pipeline {
         stage("build") {
             steps {
                 script {
+                    echo "Building the application..."
 //                     gv.buildApp()
                 }
             }
@@ -31,6 +33,7 @@ pipeline {
             }
             steps {
                 script {
+                    echo "testing the application..."
 //                     gv.testApp()
                 }
             }
@@ -39,7 +42,7 @@ pipeline {
             steps {
                 script {
                     env.ENV = input message: "Select the environment to deploy to", ok: "Done", parameters: [choice(name: 'ONE', choices: ['dev', 'staging', 'prod'], description: '')]
-
+                    echo "Deploying the application..."
 //                     gv.deployApp()
                     echo "Deploying to ${ENV}"
                 }
