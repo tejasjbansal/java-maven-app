@@ -1,18 +1,18 @@
+#!/usr/bin/env groovy
+
 pipeline {
-    agent any
-    tools {
-        maven 'Maven'
-    }
-    environment {
-        NEW_VERSION = '1.3.0'
-        SERVER_CREDENTIALS = credentials('server-credentials')
-    }
+    agent none
     stages {
         stage('build') {
+            when{
+                expression {
+                    BRANCH_NAME == 'main'
+                }
+            }
             steps {
                 script {
                     echo "Building the application..."
-                    echo "Building version ${NEW_VERSION}"
+                    echo "Executing pipeline for branch ${BRANCH_NAME}"
                 }
             }
         }
@@ -24,10 +24,14 @@ pipeline {
             }
         }
         stage('deploy') {
+            when{
+                expression {
+                    BRANCH_NAME == 'main'
+                }
+            }
             steps {
                 script {
                     echo "Deploying the application..."
-                    echo "deploying with ${SERVER_CREDENTIALS}"
                 }
             }
         }
