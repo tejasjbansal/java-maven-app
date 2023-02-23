@@ -34,9 +34,9 @@ pipeline {
             steps {
                 script {
                     echo "building the application..."
-                    buildImage()
-//                     dockerLogin()
-//                     dockerPush 'tejashbansal/my-repo:jma-3.0'
+                    buildImage 'tejashbansal/my-repo:jma-3.0'
+                    dockerLogin()
+                    dockerPush 'tejashbansal/my-repo:jma-3.0'
                 }
             }
         }
