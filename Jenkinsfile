@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 
-library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
+library identifier: 'Jenkins_shared_Lib@main', retriever: modernSCM(
         [$class: 'GitSCMSource',
-         remote: 'https://gitlab.com/nanuchi/jenkins-shared-library.git',
-         credentialsId: 'gitlab-credentials'
+         remote: 'https://github.com/tejasjbansal/Jenkins_shared_Lib.git',
+         credentialsId: 'Github-id'
         ]
 )
 
@@ -13,7 +13,7 @@ def gv
 pipeline {
     agent any
     tools {
-        maven 'Maven'
+        maven 'maven-3.9'
     }
     stages {
         stage("init") {
@@ -33,9 +33,9 @@ pipeline {
         stage("build and push image") {
             steps {
                 script {
-                    buildImage 'nanajanashia/demo-app:jma-3.0'
-                    dockerLogin()
-                    dockerPush 'nanajanashia/demo-app:jma-3.0'
+//                     buildImage 'tejashbansal/my-repo:jma-3.0'
+//                     dockerLogin()
+//                     dockerPush 'tejashbansal/my-repo:jma-3.0'
                 }
             }
         }
