@@ -33,8 +33,8 @@ pipeline {
         stage("build and push image") {
             steps {
                 script {
-                       echo "building the application..."
-//                     buildImage 'tejashbansal/my-repo:jma-3.0'
+                    echo "building the application..."
+                    buildImage()
 //                     dockerLogin()
 //                     dockerPush 'tejashbansal/my-repo:jma-3.0'
                 }
