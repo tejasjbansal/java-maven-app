@@ -1,14 +1,14 @@
 def buildJar() {
     echo "building the application..."
-    sh 'mvn package'
+    sh 'mvn clean package'
 } 
 
 def buildImage() {
     echo "building the docker image..."
     withCredentials([usernamePassword(credentialsId: 'Docker-Id', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        sh 'docker build -t tejashbansal/my-repo:jma-2.0 .'
-        sh "docker login -u $USER -p $PASS"
-        sh 'docker push tejashbansal/my-repo:jma-2.0'
+        sh "docker build -t tejashbansal/my-repo:${IMAGE_NAME} ."
+        sh "echo $PASS | docker login -u $USER --password-stdin"
+        sh "docker push tejashbansal/my-repo:${IMAGE_NAME}"
     }
 } 
 
