@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Image"
-//                     gv.buildImage()
+                    gv.buildImage()
                 }
             }
         }
