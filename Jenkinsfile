@@ -17,15 +17,15 @@ pipeline {
 //     environment {
 //         IMAGE_NAME = 'nanajanashia/demo-app:java-maven-2.0'
 //     }
-//     stages {
-//         stage('build app') {
-//             steps {
-//                script {
-//                   echo 'building application jar...'
+    stages {
+        stage('build app') {
+            steps {
+               script {
+                  echo 'building application jar...'
 //                   buildJar()
-//                }
-//             }
-//         }
+               }
+            }
+        }
         stage('build image') {
             steps {
                 script {
@@ -54,3 +54,4 @@ pipeline {
             }
         }
     }
+}
