@@ -14,25 +14,25 @@ pipeline {
     tools {
         maven 'maven-3.9'
     }
-    environment {
-        IMAGE_NAME = 'nanajanashia/demo-app:java-maven-2.0'
-    }
-    stages {
-        stage('build app') {
-            steps {
-               script {
-                  echo 'building application jar...'
-                  buildJar()
-               }
-            }
-        }
+//     environment {
+//         IMAGE_NAME = 'nanajanashia/demo-app:java-maven-2.0'
+//     }
+//     stages {
+//         stage('build app') {
+//             steps {
+//                script {
+//                   echo 'building application jar...'
+//                   buildJar()
+//                }
+//             }
+//         }
         stage('build image') {
             steps {
                 script {
                    echo 'building docker image...'
-                   buildImage(env.IMAGE_NAME)
-                   dockerLogin()
-                   dockerPush(env.IMAGE_NAME)
+//                    buildImage(env.IMAGE_NAME)
+//                    dockerLogin()
+//                    dockerPush(env.IMAGE_NAME)
                 }
             }
         }
@@ -40,14 +40,15 @@ pipeline {
             steps {
                 script {
                    echo 'deploying docker image to EC2...'
-
-                   def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
-                   def ec2Instance = "ec2-user@34.205.65.241"
+                   def dockerCmd = 'docker run -p 80:80 -d tejashbansal/node:1.0'
+//                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+//                    def ec2Instance = "ec2-user@34.205.65.241"
 
                    sshagent(['ec2-server-key']) {
-                       sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
-                       sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
-                       sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
+//                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
+//                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
+//                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
+                          sh "scp -o StrictHostKeyChecking=no ec2-user@34.205.65.241 ${dockerCmd}"
                    }
                 }
             }
