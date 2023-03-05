@@ -52,6 +52,7 @@ pipeline {
             steps {
                 script {
                    echo 'building docker image...'
+                   env.IMAGE_NAME = "tejashbansal/my-repo:${IMAGE_NAME}"
                    buildImage(env.IMAGE_NAME)
                    dockerLogin()
                    dockerPush(env.IMAGE_NAME)
