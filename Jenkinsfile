@@ -14,10 +14,24 @@ pipeline {
     tools {
         maven 'maven-3.9'
     }
-    environment {
-        IMAGE_NAME = 'tejashbansal/my-repo:jma-3.0'
-    }
+    // environment {
+    //     IMAGE_NAME = 'tejashbansal/my-repo:jma-3.0'
+    // }
+
     stages {
+         stage('increment version') {
+            steps {
+                script {
+                    echo 'incrementing app version...'
+                    sh 'mvn build-helper:parse-version versions:set \
+                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                        versions:commit'
+                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                    def version = matcher[0][1]
+                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                }
+            }
+        }
         stage('build app') {
             steps {
                script {
@@ -50,6 +64,22 @@ pipeline {
                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
                         //   sh "ssh -o StrictHostKeyChecking=no ec2-user@34.205.65.241 ${dockerCmd}"
                    }
+                }
+            }
+        }
+         stage('commit version update') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'Jenkins-webhook',variable: 'token')]) {
+                        // git config here for the first time run
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "jenkins"'
+
+                        sh "git remote set-url origin https://${token}@github.com/tejasjbansal/java-maven-app.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci: version bump"'
+                        sh 'git push origin HEAD:feature/jenkinsfile-sshagent'
+                    }
                 }
             }
         }
