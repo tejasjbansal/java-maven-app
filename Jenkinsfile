@@ -15,7 +15,7 @@ pipeline {
         maven 'maven-3.9'
     }
     environment {
-        IMAGE_NAME = 'tejashbansal/my-repo:jma-5.0'
+        IMAGE_NAME = 'tejashbansal/my-repo:jma-3.0'
     }
     stages {
         stage('build app') {
@@ -40,15 +40,15 @@ pipeline {
             steps {
                 script {
                    echo 'deploying docker image to EC2...'
-                   def dockerCmd = 'docker run -p 8080:8080 -d ${IMAGE_NAME}'
-                //    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
-                //    def ec2Instance = "ec2-user@34.205.65.241"
+                //    def dockerCmd = 'docker run -p 8080:8080 -d ${IMAGE_NAME}'
+                   def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+                   def ec2Instance = "ec2-user@34.205.65.241"
 
                    sshagent(['ec2-server-key']) {
-//                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
-//                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
-//                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
-                          sh "ssh -o StrictHostKeyChecking=no ec2-user@34.205.65.241 ${dockerCmd}"
+                       sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
+                       sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
+                       sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
+                        //   sh "ssh -o StrictHostKeyChecking=no ec2-user@34.205.65.241 ${dockerCmd}"
                    }
                 }
             }
